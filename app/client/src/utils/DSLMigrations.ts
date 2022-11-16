@@ -25,6 +25,7 @@ import {
   migrateTableWidgetIconButtonVariant,
   migrateTableWidgetV2Validation,
   migrateTableWidgetV2ValidationBinding,
+  migrateTableWidgetV2SelectOption,
 } from "./migrations/TableWidget";
 import {
   migrateTextStyleFromTextWidget,
@@ -1139,6 +1140,11 @@ export const transformDSL = (
 
   if (currentDSL.version === 66) {
     currentDSL = migrateTableWidgetV2ValidationBinding(currentDSL);
+    currentDSL.version = 67;
+  }
+
+  if (currentDSL.version === 67) {
+    currentDSL = migrateTableWidgetV2SelectOption(currentDSL);
     currentDSL.version = LATEST_PAGE_VERSION;
   }
 
