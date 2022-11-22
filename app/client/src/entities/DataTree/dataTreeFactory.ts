@@ -87,6 +87,7 @@ export interface MetaArgs {
   arguments: Variable[];
   isAsync: boolean;
   confirmBeforeExecute: boolean;
+  body: string;
 }
 /**
  *  Map of overriding property as key and overridden property as values

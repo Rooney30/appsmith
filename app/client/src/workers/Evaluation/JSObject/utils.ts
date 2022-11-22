@@ -81,6 +81,7 @@ export const updateJSCollectionInUnEvalTree = (
           arguments: action.arguments,
           isAsync: false,
           confirmBeforeExecute: false,
+          body: action.body,
         };
         set(modifiedUnEvalTree, `${jsCollection.name}.meta`, meta);
         const data = get(
