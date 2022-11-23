@@ -354,7 +354,7 @@ describe("generateDataTreeJSAction", () => {
           arguments: [],
           isAsync: false,
           confirmBeforeExecute: false,
-          body: "() => {\n\t\t//write code here\n\t return JSObject2.myFun2}",
+          body: "() => {\n\t\t//write code here\n\t}",
         },
       },
       bindingPaths: {
