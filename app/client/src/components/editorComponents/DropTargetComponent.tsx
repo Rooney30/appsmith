@@ -1,33 +1,33 @@
+import { AppState } from "@appsmith/reducers";
+import {
+  GridDefaults,
+  MAIN_CONTAINER_WIDGET_ID,
+} from "constants/WidgetConstants";
+import equal from "fast-deep-equal/es6";
 import React, {
-  ReactNode,
   Context,
   createContext,
   memo,
-  useEffect,
-  useRef,
+  ReactNode,
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
 } from "react";
-import styled from "styled-components";
-import equal from "fast-deep-equal/es6";
-import { WidgetProps } from "widgets/BaseWidget";
-import { getCanvasSnapRows } from "utils/WidgetPropsUtils";
-import {
-  MAIN_CONTAINER_WIDGET_ID,
-  GridDefaults,
-} from "constants/WidgetConstants";
-import { calculateDropTargetRows } from "./DropTargetUtils";
-import DragLayerComponent from "./DragLayerComponent";
-import { AppState } from "@appsmith/reducers";
 import { useSelector } from "react-redux";
-import {
-  useShowPropertyPane,
-  useCanvasSnapRowsUpdateHook,
-} from "utils/hooks/dragResizeHooks";
-import { getOccupiedSpacesSelectorForContainer } from "selectors/editorSelectors";
-import { useWidgetSelection } from "utils/hooks/useWidgetSelection";
 import { getDragDetails } from "sagas/selectors";
+import { getOccupiedSpacesSelectorForContainer } from "selectors/editorSelectors";
 import { getIsMobile } from "selectors/mainCanvasSelectors";
+import styled from "styled-components";
+import {
+  useCanvasSnapRowsUpdateHook,
+  useShowPropertyPane,
+} from "utils/hooks/dragResizeHooks";
+import { useWidgetSelection } from "utils/hooks/useWidgetSelection";
+import { getCanvasSnapRows } from "utils/WidgetPropsUtils";
+import { WidgetProps } from "widgets/BaseWidget";
+import DragLayerComponent from "./DragLayerComponent";
+import { calculateDropTargetRows } from "./DropTargetUtils";
 
 type DropTargetComponentProps = WidgetProps & {
   children?: ReactNode;
@@ -36,6 +36,7 @@ type DropTargetComponentProps = WidgetProps & {
   minHeight: number;
   noPad?: boolean;
   isWrapper?: boolean;
+  columnSplitRatio: number;
 };
 
 const StyledDropTarget = styled.div`
@@ -196,6 +197,8 @@ export function DropTargetComponent(props: DropTargetComponentProps) {
   const style: { [key: string]: string } = {
     height,
     boxShadow,
+    width: 100 * props.columnSplitRatio + "%",
+    display: props.columnSplitRatio === 1 ? "block" : "inline-block",
   };
   return (
     <DropTargetContext.Provider value={contextValue}>

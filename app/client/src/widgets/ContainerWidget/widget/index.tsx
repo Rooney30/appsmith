@@ -18,8 +18,11 @@ import WidgetsMultiSelectBox from "pages/Editor/WidgetsMultiSelectBox";
 
 import { Positioning, ResponsiveBehavior } from "components/constants";
 import {
+  ColumnSplitRatio,
+  ColumnSplitTypes,
   generatePositioningConfig,
   generateResponsiveBehaviorConfig,
+  getColumnSplittingConfig,
 } from "utils/layoutPropertiesUtils";
 
 export class ContainerWidget extends BaseWidget<
@@ -67,6 +70,7 @@ export class ContainerWidget extends BaseWidget<
           },
           generatePositioningConfig(Positioning.Vertical),
           { ...generateResponsiveBehaviorConfig(ResponsiveBehavior.Fill) },
+          getColumnSplittingConfig(),
         ],
       },
     ];
@@ -179,19 +183,23 @@ export class ContainerWidget extends BaseWidget<
     };
   };
 
-  renderChildWidget(childWidgetData: WidgetProps): React.ReactNode {
+  renderChildWidget(childWidgetData: WidgetProps, i: number): React.ReactNode {
+    const columnSplitRatio: number[] =
+      ColumnSplitRatio[
+        (this.props.columnSplitType as ColumnSplitTypes) || "1-column"
+      ];
     const childWidget = { ...childWidgetData };
 
     const { componentHeight, componentWidth } = this.getComponentDimensions();
-
-    childWidget.rightColumn = componentWidth;
+    childWidget.columnSplitRatio = columnSplitRatio[i];
+    childWidget.columnSplitType = this.props.columnSplitType;
+    childWidget.rightColumn = componentWidth * columnSplitRatio[i];
     childWidget.bottomRow = this.props.shouldScrollContents
       ? childWidget.bottomRow
       : componentHeight;
     childWidget.minHeight = componentHeight;
     childWidget.shouldScrollContents = false;
     childWidget.canExtend = this.props.shouldScrollContents;
-
     childWidget.parentId = this.props.widgetId;
     // Pass layout controls to children
     childWidget.positioning =
